@@ -8,9 +8,13 @@
     "compile": "tsc",
     "dev": "tsx watch ./src/index.ts",
     "start": "npm run compile && nodemon ./dist/index.js",
+    "generate": "graphql-codegen",
     "format": "prettier --write \"src/**/*.ts\""
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-resolvers": "^4.2.1",
     "dotenv": "^8.6.0",
     "nodemon": "^3.1.0",
     "prettier": "^3.3.3",
@@ -21,6 +25,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@apollo/datasource-rest": "^6.3.0",
     "@apollo/server": "^4.11.0",
     "@graphql-tools/graphql-file-loader": "^8.0.1",
     "@graphql-tools/load": "^8.0.2",

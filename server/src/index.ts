@@ -4,16 +4,28 @@ import { addMocksToSchema } from "@graphql-tools/mock";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 
 import typeDefs from "./schema";
-import mocks from "./schema/mocks";
+import resolvers from "./resolvers";
+import TrackAPI from "./datasources/TrackAPI";
+
+export interface APIContext {
+  dataSources: {
+    trackAPI: TrackAPI;
+  };
+}
 
 async function startApolloServer() {
-  const server = new ApolloServer({
-    schema: addMocksToSchema({
-      schema: makeExecutableSchema({ typeDefs }),
-      mocks
-    })
-  });
-  return await startStandaloneServer(server);
+  const server = new ApolloServer({ typeDefs, resolvers });
+  const configuration = {
+    context:async () => {
+      const { cache } = server;
+      return {
+        dataSources: {
+          trackAPI: new TrackAPI({ cache })
+        }
+      }
+    }
+  };
+  return await startStandaloneServer<APIContext>(server, configuration);
 }
 
 startApolloServer().then(({ url }) => {
